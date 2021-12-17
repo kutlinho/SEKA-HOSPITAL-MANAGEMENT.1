@@ -15,7 +15,7 @@ public class Admin extends Employee implements IViewPatients {
     }
 
     public void answerRequest() {
-
+        System.out.println("My second change.");
     }
 
     public void viewEmployee() {
