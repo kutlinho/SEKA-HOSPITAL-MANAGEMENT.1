@@ -15,7 +15,8 @@ public class HealthCareStaff extends Employee{
     @Override
     public void calculateSalary() {
         // TODO Auto-generated method stub
-
+        int changed=5;
+        System.out.printf("%d",5);
     }
 
     public Policlinic getPoliclinic() {
