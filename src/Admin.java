@@ -43,7 +43,7 @@ public class Admin extends Employee implements IViewPatients {
     }
 
     public void answerRequest() {
-
+        System.out.println("Kutluhan");
     }
 
     public void viewEmployee() {
