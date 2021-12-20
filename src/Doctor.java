@@ -2,8 +2,8 @@
 public class Doctor extends HealthCareStaff implements IViewPatients{
 
     public Doctor(String name, String id, String gender, String birthday, String registryNumber, double salary,
-                  String startingDate, Policlinic policlinic) {
-        super(name, id, gender, birthday, registryNumber, salary, startingDate, policlinic);
+                  String startingDate, Policlinic policlinic,int watchCount,int dayOffCount) {
+        super(name, id, gender, birthday, registryNumber, salary, startingDate, policlinic,watchCount,dayOffCount);
     }
 
     public void addDiagnosis() {
@@ -23,8 +23,8 @@ public class Doctor extends HealthCareStaff implements IViewPatients{
     }
 
     @Override
-    public void calculateSalary() {
-        super.calculateSalary();
+    public double calculateSalary() {
+        return 1;
     }
 
     @Override

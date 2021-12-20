@@ -10,7 +10,7 @@ public abstract class Employee extends Person{
         this.setStartingDate(startingDate);
     }
 
-    public abstract void calculateSalary();
+    public abstract double calculateSalary();
     // Encapsulation fields
     public String getRegistryNumber() {
         return registryNumber;

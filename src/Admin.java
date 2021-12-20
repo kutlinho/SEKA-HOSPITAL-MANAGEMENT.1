@@ -12,8 +12,8 @@ public class Admin extends Employee implements IViewPatients {
     }
 
     @Override
-    public void calculateSalary() {
-        int a = 6;
+    public double calculateSalary() {
+        return 15000;
     }
 
     public void addEmployee() {
@@ -21,22 +21,23 @@ public class Admin extends Employee implements IViewPatients {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
         System.out.println(date);
-        //Policlinic policlinic  =new Policlinic("ortopedi",)
-        // employees.add(new HealthCareStaff("kutlu meydan", "23654589", "Male",
-        //        "24/07/2001", createId(), 10000, date));
+        Policlinic policlinic = new Policlinic("ortopedi", );
+        Employee a = new HealthCareStaff("kutlu meydan", "23654589", "Male",
+                "24/07/2001", createRN(), 10000, date, policlinic);
     }
-    public String createId(){
-        String userId="NaN";
-        String emploType="NaN"; // Şimdilik
-        switch(emploType){
+
+    public String createRN() {
+        String userId = "NaN";
+        String emploType = "NaN"; // Şimdilik
+        switch (emploType) {
             case "Specialist":
-                userId = "D1"+"589"; //589 textbox'tan alınacak.
+                userId = "D1" + "589"; //589 textbox'tan alınacak.
                 break;
             case "Practitioner":
-                userId = "D2"+"589"; //589 textbox'tan alınacak.
+                userId = "D2" + "589"; //589 textbox'tan alınacak.
                 break;
             case "Nurse":
-                userId = "N1"+"589"; //589 textbox'tan alınacak.
+                userId = "N1" + "589"; //589 textbox'tan alınacak.
                 break;
         }
         return userId;
