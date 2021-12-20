@@ -20,6 +20,7 @@ public class HealthCareStaff extends Employee{
     }
 
     public Policlinic getPoliclinic() {
+        int a=367;
         return policlinic;
     }
 
