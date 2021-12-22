@@ -1,5 +1,5 @@
 
-public class HealthCareStaff extends Employee{
+public class HealthCareStaff extends Employee {
 
     private Policlinic policlinic;
     private int watchCount = 0;
@@ -7,25 +7,27 @@ public class HealthCareStaff extends Employee{
 
 
     public HealthCareStaff(String name, String id, String gender, String birthday, String registryNumber, double salary,
-                      String startingDate, Policlinic policlinic,int watchCount,int dayOffCount) {
-        super(name, id, gender, birthday, registryNumber, salary , startingDate);
+                           String startingDate, Policlinic policlinic, int watchCount, int dayOffCount) {
+        super(name, id, gender, birthday, registryNumber, salary, startingDate);
         //this.setSalary(calculateSalary());
 
         this.policlinic = policlinic;
     }
-public double mySalary(){
+
+    public double mySalary() {
         return 50;
-}
+    }
+
     @Override
     public double calculateSalary() {
         // TODO Auto-generated method stub
-        int changed=5;
-        System.out.printf("%d",5);
-
+        int changed = 5;
+        System.out.printf("%d", 5);
+        return 0;
     }
 
     public Policlinic getPoliclinic() {
-        int a=367;
+        int a = 367;
         return policlinic;
     }
 
