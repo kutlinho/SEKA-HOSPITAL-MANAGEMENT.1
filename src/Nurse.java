@@ -1,9 +1,9 @@
 
-public class Nurse extends HealthCareStaff implements IWatchRequest,IDayOffRequest,IMedicineRequest {
+public class Nurse extends HealthCareStaff implements IWatchRequest, IDayOffRequest, IMedicineRequest {
 
     public Nurse(String name, String id, String gender, String birthday, String registryNumber, double salary,
-                 String startingDate, Policlinic policlinic) {
-        super(name, id, gender, birthday, registryNumber, salary, startingDate, policlinic);
+                 String startingDate, Policlinic policlinic, int watchCount, int dayOffCount) {
+        super(name, id, gender, birthday, registryNumber, salary, startingDate, policlinic, watchCount, dayOffCount);
         // TODO Auto-generated constructor stub
     }
 
@@ -12,8 +12,8 @@ public class Nurse extends HealthCareStaff implements IWatchRequest,IDayOffReque
     }
 
     @Override
-    public void calculateSalary() {
-
+    public double calculateSalary() {
+        return 0;
     }
 
     @Override

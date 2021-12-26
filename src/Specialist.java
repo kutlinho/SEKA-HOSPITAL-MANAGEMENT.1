@@ -4,15 +4,14 @@ public class Specialist extends Doctor implements IWatchRequest,IDayOffRequest{
     private DoctorRoom doctorRoom;
 
     public Specialist(String name, String id, String gender, String birthday, String registryNumber, double salary,
-                      String startingDate, Policlinic policlinic) {
-        super(name, id, gender, birthday, registryNumber, salary, startingDate, policlinic);
+                      String startingDate, Policlinic policlinic,int watchCount,int dayOffCount) {
+        super(name, id, gender, birthday, registryNumber, salary, startingDate, policlinic, watchCount, dayOffCount);
         // TODO Auto-generated constructor stub
     }
 
     @Override
-    public void calculateSalary() {
-        // TODO Auto-generated method stub
-        super.calculateSalary();
+    public double calculateSalary() {
+        return 0;
     }
 
     public DoctorRoom getDoctorRoom() {

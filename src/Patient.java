@@ -3,18 +3,17 @@ import java.util.ArrayList;
 public class Patient extends Person{
     private int weight;
     private int height;
-    private boolean isInpatient;
+    private int roomId;
     private String bloodGroup;
     private ArrayList<String> diagnosis = new ArrayList<String>();
     private ArrayList<Medicine> medicines = new ArrayList<Medicine>();
     private ArrayList<Doctor> doctors = new ArrayList<Doctor>();
 
     public Patient(String name, String id, String gender, String birthday,
-                   int weight,int height,boolean isInpatient,String bloodGroup) {
+                   int weight,int height,String bloodGroup) {
         super(name, id, gender, birthday);
         this.weight = weight;
         this.height = height;
-        this.isInpatient = isInpatient;
         this.bloodGroup = bloodGroup;
     }
 
@@ -33,14 +32,6 @@ public class Patient extends Person{
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public boolean isInpatient() {
-        return isInpatient;
-    }
-
-    public void setInpatient(boolean inpatient) {
-        isInpatient = inpatient;
     }
 
     public String getBloodGroup() {
@@ -73,5 +64,13 @@ public class Patient extends Person{
 
     public void setDoctors(ArrayList<Doctor> doctors) {
         this.doctors = doctors;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 }

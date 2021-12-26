@@ -21,7 +21,7 @@ public double mySalary(){
         // TODO Auto-generated method stub
         int changed=5;
         System.out.printf("%d",5);
-
+ return 5;
     }
 
     public Policlinic getPoliclinic() {
