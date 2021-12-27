@@ -12,7 +12,7 @@ public class Main {
         // }
 
         DbHelper dbHelper = new DbHelper();
-         dbHelper.createNewData("city","Name,CountryCode,District,Population","Samet City,SKA,Gazi,313131");
+         dbHelper.createNewData("insert into city (Name,CountryCode,District,Population) values ('Samet City','TUR','Smt','13690')");
         //dbHelper.deleteData("city", "ID", "1");
         //dbHelper.updateData("city","Name","Yallah","ID","2");
 

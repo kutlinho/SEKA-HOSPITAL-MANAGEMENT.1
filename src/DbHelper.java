@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class DbHelper {
     private String username = "root";
-    private String password = "Kutluhan.18";
+    private String password = "smtdgn3000";
     private String dbUrl = "jdbc:mysql://localhost:3306/world";
     Connection connection = null;
 
@@ -128,9 +128,24 @@ public class DbHelper {
         System.out.println("Error : " + e.getMessage());
         System.out.println("Error Code : " + e.getErrorCode());
     }
+    public void createNewData(String client) {
+        //String sql = "insert into " + table + " ("+columns+") "+ "values" + " (" + values + ") ";
+        //String client=sql;
+        //String sql1="insert into city (Name,CountryCode,District,Population) values ('Samet City','TUR','Smt','13690')";
+        //System.out.println(sql+"\n"+sql1+"\n"+client);
+        openConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(client);
+            statement.executeUpdate();
+            System.out.println("Kayıt eklendi");
+        } catch (SQLException e) {
+            showErrorMessage(e);
+        } finally {
+            closeConnection();
+        }
+    }
 
-
-    public void createNewData(String table, String columns, String values) {
+    public void createNewData(String table, String columns, String values) { // burada patlıyor 1064
         String[] columns1 = columns.split(",");
         String[] valuesArray = values.split(",");
         String values1="";
@@ -142,14 +157,25 @@ public class DbHelper {
                 values1+="?,";
             }
         }
-        String sql = "insert into " + table + " ( " + columns + " ) " + " values " + " ( " + values1 + " ) ";
+        System.out.println( "values 1 "+values1);
+        String sql = "insert into " + "city" + " ( " + "Name,CountryCode,District,Population" + " ) " + " values " + " ( " + "SametCity,SKA,Gazi,13690" + " ) ";
+        //"city","Name,CountryCode,District,Population","Samet City,SKA,Gazi,13690"
+        System.out.println("sql string "+ sql);
+        for (String dta:valuesArray) {
+            System.out.println(dta);
+        }
         openConnection();
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            for(int i=0;i<valuesArray.length;i++){
-                statement.setString(i+1,valuesArray[i]);
-            }
-            statement.executeUpdate();
+            //PreparedStatement statement = connection.prepareStatement(sql);
+            Statement statement=connection.createStatement();
+            int ctr=0;
+
+
+            //for(int i=0;i<valuesArray.length;i++){
+            //    statement.setString(i+1,valuesArray[i]);
+            //}
+            // "INSERT INTO city VALUES (SametCity,SKA,Gazi,13690) "
+            statement.executeUpdate("INSERT INTO city (Name,CountryCode,District,Population) VALUES (yhg,SKA,Gazi,13690)");
             System.out.println("Kayıt eklendi");
         } catch (SQLException e) {
             showErrorMessage(e);
