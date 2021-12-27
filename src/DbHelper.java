@@ -28,25 +28,25 @@ public class DbHelper {
         }
     }
 
-    public void createNewData(String table, String columns, String values) {
-        String sql = "insert into " + table + " ( " + columns + " ) " + " values " + " ( " + values + " ) ";
-        openConnection();
+//    public void createNewData(String table, String columns, String values) {
+//        String sql = "insert into " + table + " ( " + columns + " ) " + " values " + " (" + values + ") ";
+//        openConnection();
+//        try {
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.executeUpdate();
+//            System.out.println("Kayıt eklendi");
+//        } catch (SQLException e) {
+//            showErrorMessage(e);
+//        } finally {
+//            closeConnection();
+//        }
+//    }
 
-        try {
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            showErrorMessage(e);
-        } finally {
-            closeConnection();
-        }
-    }
-
-    public void deleteData(String table, String client,String filter){
-        PreparedStatement  statement = null;
+    public void deleteData(String table, String client, String filter) {
+        PreparedStatement statement = null;
         openConnection();
         try {
-            String sql = "delete from "+table+" where "+client+" = "+filter;
+            String sql = "delete from " + table + " where " + client + " = " + filter;
             statement = connection.prepareStatement(sql);
             statement.executeUpdate(); // returns "... rows affected"
             System.out.println("Kayıt silindi");
@@ -63,12 +63,12 @@ public class DbHelper {
         }
     }
 
-    public void updateData(String table,String column,String value,String client,String filter){
+    public void updateData(String table, String column, String value, String client, String filter) {
         PreparedStatement statement = null;
         openConnection();
         try {
 
-            String sql = "update city set " +column+ " = "+value+" where "+client+" = "+filter;
+            String sql = "update city set " + column + " = '" + value + "' where " + client + " = " + filter;
             statement = connection.prepareStatement(sql);
             statement.executeUpdate();
             System.out.println("Kayıt güncellendi");
@@ -85,28 +85,28 @@ public class DbHelper {
         }
     }
 
-    public void selectData(String table,String columns){
+    public ArrayList<ArrayList> selectData(String table, String columns) {
         Statement statement = null;
         ResultSet resultSet;
         openConnection();
         String[] columns1 = columns.split(",");
+        ArrayList<ArrayList> data = new ArrayList<ArrayList>();
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("select "+columns +" from  "+table);
+            resultSet = statement.executeQuery("select " + columns + " from  " + table);
             //ArrayList<String> asd=new ArrayList<String>(Arrays.asList(""));
-            ArrayList<ArrayList> data = new ArrayList<ArrayList>();
+
             while (resultSet.next()) {
                 ArrayList<String> asd = new ArrayList<String>();
-               for(String code:columns1){
-                   asd.add(resultSet.getString(code));
+                for (String code : columns1) {
+                    asd.add(resultSet.getString(code));
 
-               }
+                }
                 data.add(asd);
             }
-        }catch (SQLException exception){
+        } catch (SQLException exception) {
             showErrorMessage(exception);
-        }
-        finally {
+        } finally {
             try {
                 statement.close();
             } catch (SQLException e) {
@@ -114,6 +114,8 @@ public class DbHelper {
             }
             closeConnection();
         }
+        return data;
+
     }
     //resultSet.getString("Code"),
     //       resultSet.getString("Name"),
@@ -125,5 +127,34 @@ public class DbHelper {
     public void showErrorMessage(SQLException e) {
         System.out.println("Error : " + e.getMessage());
         System.out.println("Error Code : " + e.getErrorCode());
+    }
+
+
+    public void createNewData(String table, String columns, String values) {
+        String[] columns1 = columns.split(",");
+        String[] valuesArray = values.split(",");
+        String values1="";
+        for(int i=0;i<columns1.length;i+=1){
+            if(i==columns1.length-1){
+                values1+="?";
+            }
+            else{
+                values1+="?,";
+            }
+        }
+        String sql = "insert into " + table + " ( " + columns + " ) " + " values " + " ( " + values1 + " ) ";
+        openConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            for(int i=0;i<valuesArray.length;i++){
+                statement.setString(i+1,valuesArray[i]);
+            }
+            statement.executeUpdate();
+            System.out.println("Kayıt eklendi");
+        } catch (SQLException e) {
+            showErrorMessage(e);
+        } finally {
+            closeConnection();
+        }
     }
 }
