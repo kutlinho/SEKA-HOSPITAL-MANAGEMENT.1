@@ -18,7 +18,7 @@ public class Admin extends Employee implements IViewPatients {
         return 15000;
     }
 
-    public void addEmployee() { // Person, poliklinik adı , maaşı , izin ve nöbet günü parametre olarak alsın.
+    public void addEmployee(HealthCareStaff healthCareStaff) { // Person, poliklinik adı , maaşı , izin ve nöbet günü parametre olarak alsın.
         // poliklinik adını veritabanını sorgulayıp poliklinik bilgilerini çektikten sonra o polikliniği new'leyelim.
         // new healthcarestaff'a parametre olarak gönderelim.
 
@@ -26,25 +26,20 @@ public class Admin extends Employee implements IViewPatients {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         String date = simpleDateFormat.format(new Date());
         System.out.println(date);
-        Policlinic policlinic = new Policlinic("ortopedi", locations);
-        Employee a = new HealthCareStaff("kutlu meydan", "23654589", "Male",
-                "24.07.2001", createRN(), 10000, date, policlinic, 2, 3);// Textbox'tan alınacak.
+
     }
 
-    public String createRN() { // id ve çalışan tipini parametre olarak alsın.
+    public String createRN(Employee employee) { // id ve çalışan tipini parametre olarak alsın.
         String userId = "NaN";
-        String emploType = "NaN"; // Şimdilik
-        switch (emploType) {
-            case "Specialist":
-                userId = "D1" + "589"; //589 textbox'tan alınacak.
-                break;
-            case "Practitioner":
-                userId = "D2" + "589"; //589 textbox'tan alınacak.
-                break;
-            case "Nurse":
-                userId = "N1" + "589"; //589 textbox'tan alınacak.
-                break;
+        String emploType ="NaN";
+        if(employee instanceof Specialist){
+            emploType= "D1";
+        }else if(employee instanceof Practitioner){
+            emploType ="D2";
+        }else{
+            emploType = "N1";
         }
+        userId=emploType+employee.getId().substring(employee.getId().length()-3,employee.getId().length()-1);
         return userId;
     }
 
