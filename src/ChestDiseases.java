@@ -3,7 +3,10 @@ import java.util.ArrayList;
 public class ChestDiseases extends Policlinic {
 
 
-    public ChestDiseases( ArrayList<HealthCareStaff> healthCare, ArrayList<Location> locations) {
-        super("Chest Diseases",locations);
+    public ChestDiseases( String policlinicName, ArrayList<Location> locations) {
+        super(policlinicName,locations);
+    }
+    public ChestDiseases(String policlinicName){
+        super(policlinicName);
     }
 }

@@ -33,7 +33,7 @@ public class Admin extends Employee implements IViewPatients {
                     hcs.getId() + " ', " + " ' " + createRN(hcs) + " ', " + " ' " + hcs.getName() + " ', " + " ' " + hcs.getGender() + " ', " +
                     " ' " + hcs.getBirthday() + " ', " + " ' " + hcs.getStartingDate() + " ', " + " ' " + s + "', "
                     + " ' " + hcs.getPoliclinic().getPoliclinicName() + " ', " + " ' " + hcs.getDayOffCount() + " ', " + " ' " +
-                    hcs.getWatchCount() + " ', " + " ' " + ((Specialist) hcs).getDoctorRoom() + " ' " + ")";
+                    hcs.getWatchCount() + " ', " + " ' " + ((Specialist) hcs).getDoctorRoom().getRoomName() + " ' " + ")";
         } else {
             String client = "insert into healthcarestaff (personalId,regNo,name,gender,birthday," +
                     "startingDate,salary,policlinic,dayOffCount,watchCount,doctorRoom) values (" + " ' " +

@@ -13,7 +13,8 @@ public class Main {
 
         DbHelper dbHelper = new DbHelper();
       //  dbHelper.createNewData("insert into city (Name,CountryCode,District,Population) values ('Samet City','TUR','Smt','13690')");
-
+      DoctorRoom doctorRoom = new DoctorRoom("11 nolu Doktor Odası",1,null,null);
+      Orthopedics orthopedics = new Orthopedics(null);
 
 
     }

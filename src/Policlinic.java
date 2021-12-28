@@ -9,6 +9,9 @@ public class Policlinic {
         this.policlinicName = policlinicName;
         this.locations = locations;
     }
+    public Policlinic(String policlinicName){
+        this.policlinicName = policlinicName;
+    }
     public String getPoliclinicName() {
         return policlinicName;
     }

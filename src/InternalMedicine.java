@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 
 public class InternalMedicine extends Policlinic{
-    public InternalMedicine(ArrayList<Location> locations) {
-        super("Internal Medicine",  locations);
+    public InternalMedicine( String policlinicName, ArrayList<Location> locations) {
+        super(policlinicName,locations);
     }
-}
+    public InternalMedicine(String policlinicName){
+        super(policlinicName);
+    }}

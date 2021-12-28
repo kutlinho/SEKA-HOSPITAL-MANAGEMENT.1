@@ -1,7 +1,10 @@
 import java.util.ArrayList;
 
 public class EyeDiseases extends Policlinic {
-    public EyeDiseases(ArrayList<Location> locations) {
-        super("Eye Diseases", locations);
+    public EyeDiseases( String policlinicName, ArrayList<Location> locations) {
+    super(policlinicName,locations);
+}
+    public EyeDiseases(String policlinicName){
+        super(policlinicName);
     }
 }
