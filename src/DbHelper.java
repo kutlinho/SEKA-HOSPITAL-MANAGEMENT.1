@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class DbHelper {
     private String username = "root";
-    private String password = "smtdgn3000";
+    private String password = "Kutluhan.18";
     private String dbUrl = "jdbc:mysql://localhost:3306/world";
     Connection connection = null;
 
@@ -28,19 +28,19 @@ public class DbHelper {
         }
     }
 
-//    public void createNewData(String table, String columns, String values) {
-//        String sql = "insert into " + table + " ( " + columns + " ) " + " values " + " (" + values + ") ";
-//        openConnection();
-//        try {
-//            PreparedStatement statement = connection.prepareStatement(sql);
-//            statement.executeUpdate();
-//            System.out.println("Kayıt eklendi");
-//        } catch (SQLException e) {
-//            showErrorMessage(e);
-//        } finally {
-//            closeConnection();
-//        }
-//    }
+/*    public void createNewData(String table, String columns, String values) {
+        String sql = "insert into " + table + " ( " + columns + " ) " + " values " + " (" + values + ") ";
+        openConnection();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.executeUpdate();
+            System.out.println("Kayıt eklendi");
+        } catch (SQLException e) {
+            showErrorMessage(e);
+        } finally {
+            closeConnection();
+        }
+    }*/
 
     public void deleteData(String table, String client, String filter) {
         PreparedStatement statement = null;
@@ -144,7 +144,7 @@ public class DbHelper {
             closeConnection();
         }
     }
-
+/*
     public void createNewData(String table, String columns, String values) { // burada patlıyor 1064
         String[] columns1 = columns.split(",");
         String[] valuesArray = values.split(",");
@@ -176,6 +176,45 @@ public class DbHelper {
             //}
             // "INSERT INTO city VALUES (SametCity,SKA,Gazi,13690) "
             statement.executeUpdate("INSERT INTO city (Name,CountryCode,District,Population) VALUES (yhg,SKA,Gazi,13690)");
+            System.out.println("Kayıt eklendi");
+        } catch (SQLException e) {
+            showErrorMessage(e);
+        } finally {
+            closeConnection();
+        }
+    }*/
+
+    public void createNewData(String table, String columns, String values) { // burada patlıyor 1064
+        String[] columns1 = columns.split(",");
+        String[] valuesArray = values.split(",");
+        String values1="";
+        for(int i=0;i<columns1.length;i+=1){
+            if(i==columns1.length-1){
+                values1+="?";
+            }
+            else{
+                values1+="?,";
+            }
+        }
+        System.out.println( "values 1 "+values1);
+        String sql = "insert into " + table + " ( " + columns + " ) " + " values " + " ( " + values + " ) ";
+        //"city","Name,CountryCode,District,Population","Samet City,SKA,Gazi,13690"
+        System.out.println("sql string "+ sql);
+        for (String dta:valuesArray) {
+            System.out.println(dta);
+        }
+        openConnection();
+        try {
+            //PreparedStatement statement = connection.prepareStatement(sql);
+            Statement statement=connection.createStatement();
+            int ctr=0;
+
+
+            //for(int i=0;i<valuesArray.length;i++){
+            //    statement.setString(i+1,valuesArray[i]);
+            //}
+            // "INSERT INTO city VALUES (SametCity,SKA,Gazi,13690) "
+            statement.executeUpdate(sql);
             System.out.println("Kayıt eklendi");
         } catch (SQLException e) {
             showErrorMessage(e);

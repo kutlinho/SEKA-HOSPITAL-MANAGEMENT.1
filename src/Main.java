@@ -12,18 +12,8 @@ public class Main {
         // }
 
         DbHelper dbHelper = new DbHelper();
-         dbHelper.createNewData("insert into city (Name,CountryCode,District,Population) values ('Samet City','TUR','Smt','13690')");
-        //dbHelper.deleteData("city", "ID", "1");
-        //dbHelper.updateData("city","Name","Yallah","ID","2");
+      //  dbHelper.createNewData("insert into city (Name,CountryCode,District,Population) values ('Samet City','TUR','Smt','13690')");
 
-//        ArrayList<ArrayList> cities = dbHelper.selectData("city","Name,CountryCode,Population");
-//        for(ArrayList<String> a:cities){
-//            for(String i:a){
-//                System.out.print(i);
-//                System.out.print("  ");
-//            }
-//            System.out.println();
-//        }
 
 
     }

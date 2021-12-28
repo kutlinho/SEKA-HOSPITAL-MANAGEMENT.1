@@ -9,6 +9,7 @@ public abstract class Employee extends Person{
         this.setSalary(salary);
         this.setStartingDate(startingDate);
     }
+    DbHelper dbHelper = new DbHelper();
 
     public abstract double calculateSalary();
     // Encapsulation fields
