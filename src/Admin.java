@@ -27,11 +27,11 @@ public class Admin extends Employee implements IViewPatients {
         String date = simpleDateFormat.format(new Date());
         System.out.println(date);
         String s = Double.toString(hcs.getSalary());
-        String client ="";
+        String client = "";
         String doc = Integer.toString(hcs.getDayOffCount());
         String wc = Integer.toString(hcs.getWatchCount());
         if (hcs instanceof Specialist) {
-             client = "insert into healthcarestaff (personalId,regNo,name,gender,birthday," +
+            client = "insert into healthcarestaff (personalId,regNo,name,gender,birthday," +
                     "startingDate,salary,policlinic,dayOffCount,watchCount,doctorRoom) values (" + " ' " +
                     hcs.getId() + " ', " + " ' " + createRN(hcs) + " ', " + " ' " + hcs.getName() + " ', " + " ' " + hcs.getGender() + " ', " +
                     " ' " + hcs.getBirthday() + " ', " + " ' " + hcs.getStartingDate() + " ', " + " ' " + s + "', "
@@ -39,7 +39,7 @@ public class Admin extends Employee implements IViewPatients {
                     wc + " ', " + " ' " + ((Specialist) hcs).getDoctorRoom().getRoomName() + " ' " + ")";
 
         } else {
-             client = "insert into healthcarestaff (personalId,regNo,name,gender,birthday," +
+            client = "insert into healthcarestaff (personalId,regNo,name,gender,birthday," +
                     "startingDate,salary,policlinic,dayOffCount,watchCount,doctorRoom) values (" + " ' " +
                     hcs.getId() + " ', " + " ' " + createRN(hcs) + " ', " + " ' " + hcs.getName() + " ', " + " ' " + hcs.getGender() + " ', " +
                     " ' " + hcs.getBirthday() + " ', " + " ' " + hcs.getStartingDate() + " ', " + " ' " + s + " ', "
@@ -64,21 +64,58 @@ public class Admin extends Employee implements IViewPatients {
         return userId;
     }
 
-    public void answerRequest() {
+    public void answerRequest(Request request, boolean check) {
+        HealthCareStaff hcs = request.getByWho(); // assignment made for reach the variable easier
+        if (request instanceof DayOffRequest) { // Written for dayOffRequests
+            ArrayList<ArrayList<String>> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedDayOff,description", "regNo= " +
+                    hcs.getRegistryNumber()); // taking the certain request from database to store its database id.
+            if (check) {// If request is accepted from admin
+                hcs.setDayOffCaount(hcs.getDayOffCount() + ((DayOffRequest) request).getDayOffCount()); // updating dayOffCount
+                //hcs.setSalary(hcs.calculateSalary()); // Updating the salary due to change
+
+                // Updating hcs' datas
+                dbHelper.updateData("healthcarestaff", "salary", Double.toString(hcs.getSalary()), "regNo", hcs.getRegistryNumber());
+                dbHelper.updateData("healthcarestaff", "dayOffCount", Integer.toString(hcs.getDayOffCount()), "regNo", hcs.getRegistryNumber());
+            }
+            // Deleting the request from db
+            dbHelper.deleteData("request", "id", requestFromDb.get(0).get(0));
+
+        } else if (request instanceof WatchRequest) { // Similar things for WatchRequest type requests
+            ArrayList<ArrayList<String>> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedWatchRequest,description", "regNo =" +
+                    hcs.getRegistryNumber());
+
+            if (check) {// If request is accepted from admin
+                hcs.setWatchCount(hcs.getWatchCount() + ((WatchRequest) request).getWatchCount()); // updating watchCount
+                //hcs.setSalary(hcs.calculateSalary()); // Updating the salary due to change
+
+                // Updating hcs' datas
+                dbHelper.updateData("healthcarestaff", "salary", Double.toString(hcs.getSalary()), "regNo", hcs.getRegistryNumber());
+                dbHelper.updateData("healthcarestaff", "watchCount", Integer.toString(hcs.getWatchCount()), "regNo", hcs.getRegistryNumber());
+            }
+            // Deleting the request from db
+            dbHelper.deleteData("request", "id", requestFromDb.get(0).get(0));
+
+        } else {
+            ArrayList<ArrayList<String>> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedMedicineId,description", "regNo = " +
+                    hcs.getRegistryNumber());
+
+        }
+
     }
 
-    public void viewEmployee() {
-
+    public ArrayList<ArrayList> viewEmployee() {
+        return dbHelper.selectData("healthcarestaff", "(personalId,regNo,name,gender,birthday," +
+                "startingDate,salary,policlinic,dayOffCount,watchCount,doctorRoom)");
     }
 
     @Override
     public ArrayList<ArrayList> viewPatients() {
-       return dbHelper.selectData("patient","personalId,name,gender,birthday," +
+        return dbHelper.selectData("patient", "personalId,name,gender,birthday," +
                 "height,weight,bloodGroup,medicinesId,diagnosisId,doctorsId,roomId");
     }
 
     //@Override
     //public void viewPatients() {
-        // Yatan veya yatmayan tüm hastalar veritabanından çekilerek burada görüntülenecek.
+    // Yatan veya yatmayan tüm hastalar veritabanından çekilerek burada görüntülenecek.
     //}
 }

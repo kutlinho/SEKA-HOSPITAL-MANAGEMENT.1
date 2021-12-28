@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class DbHelper {
     private String username = "root";
     private String password = "Kutluhan.18";
-    private String dbUrl = "jdbc:mysql://localhost:3306/world";
+    private String dbUrl = "jdbc:mysql://localhost:3306/seka";
     Connection connection = null;
 
     public Connection getConnection() throws SQLException {
@@ -84,6 +84,40 @@ public class DbHelper {
             closeConnection();
         }
     }
+
+    public ArrayList<ArrayList<String>> selectData(String table, String columns,String client) {
+        Statement statement = null;
+        ResultSet resultSet;
+        openConnection();
+        String[] columns1 = columns.split(",");
+        ArrayList<ArrayList> data = new ArrayList<ArrayList>();
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("select " + columns + " from  " + table +"where "+client);
+
+
+            while (resultSet.next()) {
+                ArrayList<String> asd = new ArrayList<String>();
+                for (String code : columns1) {
+                    asd.add(resultSet.getString(code));
+
+                }
+                data.add(asd);
+            }
+        } catch (SQLException exception) {
+            showErrorMessage(exception);
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                showErrorMessage(e);
+            }
+            closeConnection();
+        }
+        return data;
+
+    }
+
 
     public ArrayList<ArrayList> selectData(String table, String columns) {
         Statement statement = null;
@@ -183,7 +217,7 @@ public class DbHelper {
             closeConnection();
         }
     }*/
-
+/*
     public void createNewData(String table, String columns, String values) { // burada patlıyor 1064
         String[] columns1 = columns.split(",");
         String[] valuesArray = values.split(",");
@@ -221,5 +255,5 @@ public class DbHelper {
         } finally {
             closeConnection();
         }
-    }
+    }*/
 }
