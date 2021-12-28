@@ -27,22 +27,27 @@ public class Admin extends Employee implements IViewPatients {
         String date = simpleDateFormat.format(new Date());
         System.out.println(date);
         String s = Double.toString(hcs.getSalary());
+        String client ="";
+        String doc = Integer.toString(hcs.getDayOffCount());
+        String wc = Integer.toString(hcs.getWatchCount());
         if (hcs instanceof Specialist) {
-            String client = "insert into healthcarestaff (personalId,regNo,name,gender,birthday," +
+             client = "insert into healthcarestaff (personalId,regNo,name,gender,birthday," +
                     "startingDate,salary,policlinic,dayOffCount,watchCount,doctorRoom) values (" + " ' " +
                     hcs.getId() + " ', " + " ' " + createRN(hcs) + " ', " + " ' " + hcs.getName() + " ', " + " ' " + hcs.getGender() + " ', " +
                     " ' " + hcs.getBirthday() + " ', " + " ' " + hcs.getStartingDate() + " ', " + " ' " + s + "', "
-                    + " ' " + hcs.getPoliclinic().getPoliclinicName() + " ', " + " ' " + hcs.getDayOffCount() + " ', " + " ' " +
-                    hcs.getWatchCount() + " ', " + " ' " + ((Specialist) hcs).getDoctorRoom().getRoomName() + " ' " + ")";
+                    + " ' " + hcs.getPoliclinic().getPoliclinicName() + " ', " + " ' " + doc + " ', " + " ' " +
+                    wc + " ', " + " ' " + ((Specialist) hcs).getDoctorRoom().getRoomName() + " ' " + ")";
+
         } else {
-            String client = "insert into healthcarestaff (personalId,regNo,name,gender,birthday," +
+             client = "insert into healthcarestaff (personalId,regNo,name,gender,birthday," +
                     "startingDate,salary,policlinic,dayOffCount,watchCount,doctorRoom) values (" + " ' " +
                     hcs.getId() + " ', " + " ' " + createRN(hcs) + " ', " + " ' " + hcs.getName() + " ', " + " ' " + hcs.getGender() + " ', " +
                     " ' " + hcs.getBirthday() + " ', " + " ' " + hcs.getStartingDate() + " ', " + " ' " + s + " ', "
-                    + " ' " + hcs.getPoliclinic().getPoliclinicName() + " ', " + " ' " + hcs.getDayOffCount() + " ', " +
-                    hcs.getWatchCount() + "null)";
+                    + " ' " + hcs.getPoliclinic().getPoliclinicName() + " ', " + " ' " + doc + " ', " +
+                    wc + ",null)";
 
         }
+        dbHelper.createNewData(client);
     }
 
     public String createRN(Employee employee) { // id ve çalışan tipini parametre olarak alsın.
@@ -55,21 +60,25 @@ public class Admin extends Employee implements IViewPatients {
         } else {
             emploType = "N1";
         }
-        userId = emploType + employee.getId().substring(employee.getId().length() - 3, employee.getId().length() - 1);
+        userId = emploType + employee.getId().substring(employee.getId().length() - 3);
         return userId;
     }
 
     public void answerRequest() {
-        // Çalışanların talepleri bu fonksiyon içerisinde cevaplanacak.
     }
 
     public void viewEmployee() {
-        // Tüm çalışanlar burada görüntülenecek.
-        // Veritabanından çalışanlar bilgileriyle burada görüntülenecek.
+
     }
 
     @Override
-    public void viewPatients() {
-        // Yatan veya yatmayan tüm hastalar veritabanından çekilerek burada görüntülenecek.
+    public ArrayList<ArrayList> viewPatients() {
+       return dbHelper.selectData("patient","personalId,name,gender,birthday," +
+                "height,weight,bloodGroup,medicinesId,diagnosisId,doctorsId,roomId");
     }
+
+    //@Override
+    //public void viewPatients() {
+        // Yatan veya yatmayan tüm hastalar veritabanından çekilerek burada görüntülenecek.
+    //}
 }

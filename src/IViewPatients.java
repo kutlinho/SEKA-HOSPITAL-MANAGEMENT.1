@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public interface IViewPatients {
-    void viewPatients();
+    ArrayList<ArrayList> viewPatients();
 }
