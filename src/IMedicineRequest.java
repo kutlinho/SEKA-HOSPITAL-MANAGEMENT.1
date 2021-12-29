@@ -1,3 +1,3 @@
 public interface IMedicineRequest {
-    void addMedicineRequest();
+    void addMedicineRequest(MedicineRequest medReq);
 }
