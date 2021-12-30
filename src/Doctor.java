@@ -8,231 +8,88 @@ public class Doctor extends HealthCareStaff implements IViewPatients {
         super(name, id, gender, birthday, registryNumber, salary, startingDate, policlinic, watchCount, dayOffCount);
     }
 
-    DbHelper helper = new DbHelper();
-
-    // function to add diagnosgis to patient
+    // function to add diagnosis to patient
     public void addDiagnosis(String personalId, String diagnosisId) throws SQLException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet;
-        try {
-            connection = helper.getConnection();
 
-            //query for patient's diagnoses info in database
-            String selectDB = "select diagnosisId from patient where personalId=?";
-            statement = connection.prepareStatement(selectDB);
-            statement.setString(1, personalId);
-            resultSet = statement.executeQuery();
-
-            //variable decleration to take data from database and merge it with new data
-            String diagnosisIdDB = null;
-            while (resultSet.next()) {
-                diagnosisIdDB = resultSet.getString("diagnosisId");
-            }
-            diagnosisIdDB = diagnosisIdDB + "-" + diagnosisId;
-
-            //update patient's diagnoses data
-            String updateDB = "update patient set diagnosisId =? where personalId=?";
-            statement = connection.prepareStatement(updateDB);
-            statement.setString(1, diagnosisIdDB);
-            statement.setString(2, personalId);
-            statement.executeUpdate();
-
-            System.out.println("Hastalık eklendi");
-
-        } catch (SQLException exception) {
-            helper.showErrorMessage(exception);
-        } finally {
-            statement.close();
-            connection.close();
-        }
+        ArrayList<ArrayList> patientFromDB = dbHelper.selectData("patient", "id,diagnosisId", "personalId=" + personalId);
+        String diagnosisFromDB = (String) patientFromDB.get(0).get(1);
+        diagnosisFromDB = diagnosisFromDB + "-" + diagnosisId;
+        dbHelper.updateData("patient", "diagnosisId", diagnosisFromDB, "id", (String) patientFromDB.get(0).get(0));
     }
 
     // function to add medicine to patient
     public void addMedicine(String personalId, String medicineId) throws SQLException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet;
-        try {
-            connection = helper.getConnection();
 
-            //query for patient's medicines info
-            String selectDB = "select medicinesId from patient where personalId=?";
-            String updateDB = "update patient set medicinesId =? where personalId=?";
-            statement = connection.prepareStatement(selectDB);
-            statement.setString(1, personalId);
-            resultSet = statement.executeQuery();
+        ArrayList<ArrayList> patientFromDB = dbHelper.selectData("patient", "id,medicinesId", "personalId=" + personalId);
+        String medicinesFromDB = (String) patientFromDB.get(0).get(1);
+        medicinesFromDB = medicinesFromDB + "-" + medicineId;
+        dbHelper.updateData("patient", "medicinesId", medicinesFromDB, "id", (String) patientFromDB.get(0).get(0));
 
-            //variable decleration to take data from database and merge it with new data
-            String medicinesIdDB = null;
-            while (resultSet.next()) {
-                medicinesIdDB = resultSet.getString("medicinesId");
-            }
-            medicinesIdDB = medicinesIdDB + "-" + medicineId;
-
-            //update patient's medicines data
-            statement = connection.prepareStatement(updateDB);
-            statement.setString(1, medicinesIdDB);
-            statement.setString(2, personalId);
-            statement.executeUpdate();
-
-            System.out.println("İlaç eklendi");
-
-        } catch (SQLException exception) {
-            helper.showErrorMessage(exception);
-        } finally {
-            statement.close();
-            connection.close();
-        }
     }
 
     //function that checks for empty inpatient rooms in hospital
     public int giveRoomNumber() throws SQLException {
-        Connection connection = null;
-        Statement statement = null;
-        ResultSet resultSet;
 
-        // variable that will keep empty room in memory
-        int i = 1;
-        try {
-            connection = helper.getConnection();
-            statement = connection.createStatement();
-
-            // query to take info about inpatient rooms
-            String sql = "select id,isEmpty from inpatientroom";
-            resultSet = statement.executeQuery(sql);
-
-            int roomNo = -1;
-            // variable decleration to detect which room is empty
-            while (resultSet.next()) {
-                roomNo = resultSet.getInt("isEmpty");
-                if (roomNo == 0) {
-                    break;
-                } else {
-                    i++;
-                }
-            }
-        } catch (SQLException exception) {
-            helper.showErrorMessage(exception);
-        } finally {
-            statement.close();
-            connection.close();
-        }
+        ArrayList<ArrayList> emptyRoomsNo = dbHelper.selectData("inpatientroom", "id,isEmpty", "isEmpty=0");
 
         // if i is 51 it means there is no empty room in hospital because there are 50 room
-        if (i == 51) {
+        if (emptyRoomsNo.size() == 0) {
             return 0;
         }
         // if there is an empty room i is the number of the room
         else {
-            return i;
+          return Integer.valueOf((String) emptyRoomsNo.get(0).get(0));
         }
     }
 
     // function to enroll the patient in the inpatient department
     public void makeInpatient(String personalId) throws SQLException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
 
-        try {
-            connection = helper.getConnection();
-            //checking if all rooms are full
-            if (giveRoomNumber() != 0) {
+        if (giveRoomNumber() != 0) {
 
-                // query to check whether the patient has a room
-                String control = "select roomId from patient where personalId=?";
-                statement = connection.prepareStatement(control);
-                statement.setString(1, personalId);
-                resultSet = statement.executeQuery();
+            ArrayList<ArrayList> patientFromDB = dbHelper.selectData("patient", "id,roomId", "personalId=" + personalId);
 
-                // to memorize the room number
-                int roomNo = 0;
-                while (resultSet.next()) {
-                    roomNo = resultSet.getInt("roomId");
-                }
+            // to memorize the room number
+            int roomNo = Integer.valueOf((String) patientFromDB.get(0).get(1));
+            // checking is patient have a room and to place in the room if the patient does not have a room
+            if (roomNo == 0) {
 
-                // checking is patient have a room and to place in the room if the patient does not have a room
-                if (roomNo == 0) {
+                dbHelper.updateData("patient", "roomId", Integer.toString(giveRoomNumber()), "id", (String) patientFromDB.get(0).get(0));
+                dbHelper.updateData("inpatientroom", "isEmpty", "1", "id", Integer.toString(giveRoomNumber()));
 
-                    //updating inpatient room data in database
-                    String updateDB = "update inpatientroom set isEmpty =1 where id=?";
-                    statement = connection.prepareStatement(updateDB);
-                    statement.setInt(1, giveRoomNumber());
-                    statement.executeUpdate();
-
-                    // updating patient data in database
-                    String updatepatientDB = "update patient set roomId =? where personalId=?";
-                    statement = connection.prepareStatement(updatepatientDB);
-                    statement.setInt(1, giveRoomNumber());
-                    statement.setString(2, personalId);
-                    statement.executeUpdate();
-                }
-                // displays the information if the patient already has a room.
-                else {
-                    System.out.println("Hasta zaten " + roomNo + " numaralı odada kalmaktadır");
-                }
             }
-            // If there is no empty room in the hospital, it displays the information.
+            // displays the information if the patient already has a room.
             else {
-                System.out.println("Yataklı hasta bölümünde boş yatak bulunmamaktadır.");
+                System.out.println("Hasta zaten " + roomNo + " numaralı odada kalmaktadır");
             }
-        } catch (SQLException exception) {
-            helper.showErrorMessage(exception);
-        } finally {
-            statement.close();
-            connection.close();
         }
+        // If there is no empty room in the hospital, it displays the information.
+        else {
+            System.out.println("Yataklı hasta bölümünde boş yatak bulunmamaktadır.");
+        }
+
     }
 
     // function to discharge the inpatient
     public void dischargeInpatient(String personalId) throws SQLException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = helper.getConnection();
-            // query for taking the patient's room number information from the database
-            String control = "select roomId from patient where personalId=?";
-            statement = connection.prepareStatement(control);
-            statement.setString(1, personalId);
-            resultSet = statement.executeQuery();
 
-            // variable decleration to memorize the patient's room
-            int roomNo = 0;
-            while (resultSet.next()) {
-                roomNo = resultSet.getInt("roomId");
-            }
+        ArrayList<ArrayList> patientFromDB = dbHelper.selectData("patient", "id,roomId", "personalId=" + personalId);
 
-            // if the patient is not registered as an inpatient
-            if (roomNo != 0) {
-                // emptying the room that is already full in the database
-                String updateDB = "update inpatientroom set isEmpty =0 where id=?";
-                statement = connection.prepareStatement(updateDB);
-                statement.setInt(1, giveRoomNumber());
-                statement.executeUpdate();
+        // to memorize the room number
+        int roomNo = Integer.valueOf((String) patientFromDB.get(0).get(1));
+        // checking is patient have a room and to place in the room if the patient does not have a room
+        if (roomNo != 0) {
 
-                // deleting the patient's room number in the database
-                String updatepatientDB = "update patient set roomId =? where personalId=?";
-                statement = connection.prepareStatement(updatepatientDB);
-                statement.setInt(1, 0);
-                statement.setString(2, personalId);
-                statement.executeUpdate();
+            dbHelper.updateData("patient", "roomId", "0", "id", (String) patientFromDB.get(0).get(0));
+            dbHelper.updateData("inpatientroom", "isEmpty", "0", "id", Integer.toString(roomNo));
 
-                System.out.println("Hasta taburcu edildi");
-            }
-            // displaying information if the patient is not already an inpatient
-            else {
-                System.out.println("Hasta, yatan hasta bölümünde bulunmamaktadır");
-            }
-
-        } catch (SQLException exception) {
-            helper.showErrorMessage(exception);
-        } finally {
-            statement.close();
-            connection.close();
+        }
+        // displays the information if the patient already has a room.
+        else {
+            System.out.println("Hasta zaten yatan hasta değildir");
         }
     }
+
 
     @Override
     public double calculateSalary() {
