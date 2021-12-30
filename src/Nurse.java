@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Nurse extends HealthCareStaff implements IWatchRequest, IDayOffRequest, IMedicineRequest {
 
@@ -7,8 +8,9 @@ public class Nurse extends HealthCareStaff implements IWatchRequest, IDayOffRequ
         // TODO Auto-generated constructor stub
     }
 
-    public void dispense() {
-
+    public void dispense(Medicine medicine) {
+    medicine.setMedStock(medicine.getMedStock()-1);
+    dbHelper.updateData("medicine","stock",Integer.toString(medicine.getMedStock()),"name", medicine.getMedName());
     }
 
     @Override
@@ -29,9 +31,10 @@ public class Nurse extends HealthCareStaff implements IWatchRequest, IDayOffRequ
     }
 
     @Override
-    public void addMedicineRequest() {
-        // TODO Auto-generated method stub
-
+    public void addMedicineRequest(MedicineRequest medReq) {
+        ArrayList<ArrayList<String>> medFromDb = dbHelper.selectData("medicine","id,name","name ="+medReq.getMedicine().getMedName());
+        dbHelper.createNewData("insert into request (regNo,requestedDayOff,requestedWatch,requestedMedicineId,description) " +
+                "values "+"'"+this.getRegistryNumber()+"',"+"'0',"+"'0',"+"'"+medFromDb.get(0).get(0)+"',"+"'"+medReq.getExplanation()+"'");
     }
 
 }

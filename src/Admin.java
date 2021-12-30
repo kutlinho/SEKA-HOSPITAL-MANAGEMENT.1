@@ -95,10 +95,16 @@ public class Admin extends Employee implements IViewPatients {
             // Deleting the request from db
             dbHelper.deleteData("request", "id", requestFromDb.get(0).get(0));
 
-        } else {
-            ArrayList<ArrayList<String>> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedMedicineId,description", "regNo = " +
-                    hcs.getRegistryNumber());
-
+        } else { // Medicine request
+            Medicine mdc = ((MedicineRequest) request).getMedicine();
+            ArrayList<ArrayList<String>> requestedMed = dbHelper.selectData("medicine", "id,name,stock", "name=" + mdc.getMedName());
+            String medId = requestedMed.get(0).get(0); // taking medicine id of certain medicine
+            ArrayList<ArrayList<String>> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedMedicineId,description",
+                    "requestedMedicineId = " + medId); // taking certain request from db by its medicine id
+            if (check) {// If request accepted, update the medicine stock
+                dbHelper.updateData("medicine", "medStock", "10", "id", medId);
+            }//Then delete the certain request from db
+            dbHelper.deleteData("request", "requestedMedicineId", medId);
         }
 
     }
