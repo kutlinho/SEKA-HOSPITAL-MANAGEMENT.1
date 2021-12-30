@@ -32,9 +32,9 @@ public class Nurse extends HealthCareStaff implements IWatchRequest, IDayOffRequ
 
     @Override
     public void addMedicineRequest(MedicineRequest medReq) {
-        ArrayList<ArrayList<String>> medFromDb = dbHelper.selectData("medicine","id,name","name ="+medReq.getMedicine().getMedName());
+        ArrayList<ArrayList> medFromDb = dbHelper.selectData("medicine","id,name","name ="+medReq.getMedicine().getMedName());
         dbHelper.createNewData("insert into request (regNo,requestedDayOff,requestedWatch,requestedMedicineId,description) " +
-                "values "+"'"+this.getRegistryNumber()+"',"+"'0',"+"'0',"+"'"+medFromDb.get(0).get(0)+"',"+"'"+medReq.getExplanation()+"'");
+                "values "+"'"+this.getRegistryNumber()+"',"+"'0',"+"'0',"+"'"+(String) medFromDb.get(0).get(0)+"',"+"'"+medReq.getExplanation()+"'");
     }
 
 }

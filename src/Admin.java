@@ -110,8 +110,8 @@ public class Admin extends Employee implements IViewPatients {
     }
 
     public ArrayList<ArrayList> viewEmployee() {
-        return dbHelper.selectData("healthcarestaff", "(personalId,regNo,name,gender,birthday," +
-                "startingDate,salary,policlinic,dayOffCount,watchCount,doctorRoom)");
+        return dbHelper.selectData("healthcarestaff", "personalId,regNo,name,gender,birthday," +
+                "startingDate,salary,policlinic,dayOffCount,watchCount,doctorRoom");
     }
 
     @Override
