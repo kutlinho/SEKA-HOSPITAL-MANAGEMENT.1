@@ -10,7 +10,7 @@ public class Doctor extends HealthCareStaff implements IViewPatients {
 
     DbHelper helper = new DbHelper();
 
-    // function to add diagnosis to patient
+    // function to add diagnosgis to patient
     public void addDiagnosis(String personalId, String diagnosisId) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
