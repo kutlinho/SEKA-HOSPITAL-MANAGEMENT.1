@@ -8,7 +8,7 @@ public class Doctor extends HealthCareStaff implements IViewPatients {
         super(name, id, gender, birthday, registryNumber, salary, startingDate, policlinic, watchCount, dayOffCount);
     }
 
-    // function to add diagnosis to patients
+    // function to add diagnosis to patientss
     public void addDiagnosis(String personalId, String diagnosisId) throws SQLException {
 
         ArrayList<ArrayList> patientFromDB = dbHelper.selectData("patient", "id,diagnosisId", "personalId=" + personalId);
