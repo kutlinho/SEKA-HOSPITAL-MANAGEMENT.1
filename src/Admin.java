@@ -67,7 +67,7 @@ public class Admin extends Employee implements IViewPatients {
     public void answerRequest(Request request, boolean check) {
         HealthCareStaff hcs = request.getByWho(); // assignment made for reach the variable easier
         if (request instanceof DayOffRequest) { // Written for dayOffRequests
-            ArrayList<ArrayList<String>> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedDayOff,description", "regNo= " +
+            ArrayList<ArrayList> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedDayOff,description", "regNo= " +
                     hcs.getRegistryNumber()); // taking the certain request from database to store its database id.
             if (check) {// If request is accepted from admin
                 hcs.setDayOffCaount(hcs.getDayOffCount() + ((DayOffRequest) request).getDayOffCount()); // updating dayOffCount
@@ -78,10 +78,10 @@ public class Admin extends Employee implements IViewPatients {
                 dbHelper.updateData("healthcarestaff", "dayOffCount", Integer.toString(hcs.getDayOffCount()), "regNo", hcs.getRegistryNumber());
             }
             // Deleting the request from db
-            dbHelper.deleteData("request", "id", requestFromDb.get(0).get(0));
+            dbHelper.deleteData("request", "id", (String)requestFromDb.get(0).get(0));
 
         } else if (request instanceof WatchRequest) { // Similar things for WatchRequest type requests
-            ArrayList<ArrayList<String>> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedWatchRequest,description", "regNo =" +
+            ArrayList<ArrayList> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedWatchRequest,description", "regNo =" +
                     hcs.getRegistryNumber());
 
             if (check) {// If request is accepted from admin
@@ -93,13 +93,13 @@ public class Admin extends Employee implements IViewPatients {
                 dbHelper.updateData("healthcarestaff", "watchCount", Integer.toString(hcs.getWatchCount()), "regNo", hcs.getRegistryNumber());
             }
             // Deleting the request from db
-            dbHelper.deleteData("request", "id", requestFromDb.get(0).get(0));
+            dbHelper.deleteData("request", "id",(String)requestFromDb.get(0).get(0));
 
         } else { // Medicine request
             Medicine mdc = ((MedicineRequest) request).getMedicine();
-            ArrayList<ArrayList<String>> requestedMed = dbHelper.selectData("medicine", "id,name,stock", "name=" + mdc.getMedName());
-            String medId = requestedMed.get(0).get(0); // taking medicine id of certain medicine
-            ArrayList<ArrayList<String>> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedMedicineId,description",
+            ArrayList<ArrayList> requestedMed = dbHelper.selectData("medicine", "id,name,stock", "name=" + mdc.getMedName());
+            String medId = (String)requestedMed.get(0).get(0); // taking medicine id of certain medicine
+            ArrayList<ArrayList> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedMedicineId,description",
                     "requestedMedicineId = " + medId); // taking certain request from db by its medicine id
             if (check) {// If request accepted, update the medicine stock
                 dbHelper.updateData("medicine", "medStock", "10", "id", medId);
@@ -110,8 +110,8 @@ public class Admin extends Employee implements IViewPatients {
     }
 
     public ArrayList<ArrayList> viewEmployee() {
-        return dbHelper.selectData("healthcarestaff", "(personalId,regNo,name,gender,birthday," +
-                "startingDate,salary,policlinic,dayOffCount,watchCount,doctorRoom)");
+        return dbHelper.selectData("healthcarestaff", "personalId,regNo,name,gender,birthday," +
+                "startingDate,salary,policlinic,dayOffCount,watchCount,doctorRoom");
     }
 
     @Override

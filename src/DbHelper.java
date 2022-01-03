@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class DbHelper {
     private String username = "root";
-    private String password = "Kutluhan.18";
+    private String password = "As7f978cl";
     private String dbUrl = "jdbc:mysql://localhost:3306/seka";
     Connection connection = null;
 
@@ -62,13 +62,34 @@ public class DbHelper {
             closeConnection();
         }
     }
+    public void updateData(String client) {
+        PreparedStatement statement = null;
+        openConnection();
+        try {
+
+            //String sql = client;
+            statement = connection.prepareStatement(client);
+            statement.executeUpdate();
+            System.out.println("Kayıt güncellendi");
+
+        } catch (SQLException exception) {
+            showErrorMessage(exception);
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                showErrorMessage(e);
+            }
+            closeConnection();
+        }
+    }
 
     public void updateData(String table, String column, String value, String client, String filter) {
         PreparedStatement statement = null;
         openConnection();
         try {
 
-            String sql = "update city set " + column + " = '" + value + "' where " + client + " = " + filter;
+            String sql = "update "+table+" set " + column + " = '" + value + "' where " + client + " = " + filter;
             statement = connection.prepareStatement(sql);
             statement.executeUpdate();
             System.out.println("Kayıt güncellendi");
@@ -85,7 +106,7 @@ public class DbHelper {
         }
     }
 
-    public ArrayList<ArrayList<String>> selectData(String table, String columns,String client) {
+    public ArrayList<ArrayList> selectData(String table, String columns,String client) {
         Statement statement = null;
         ResultSet resultSet;
         openConnection();
@@ -93,9 +114,7 @@ public class DbHelper {
         ArrayList<ArrayList> data = new ArrayList<ArrayList>();
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("select " + columns + " from  " + table +"where "+client);
-
-
+            resultSet = statement.executeQuery("select " + columns + " from " + table +" where "+client);
             while (resultSet.next()) {
                 ArrayList<String> asd = new ArrayList<String>();
                 for (String code : columns1) {
@@ -162,6 +181,7 @@ public class DbHelper {
         System.out.println("Error : " + e.getMessage());
         System.out.println("Error Code : " + e.getErrorCode());
     }
+
     public void createNewData(String client) {
         //String sql = "insert into " + table + " ("+columns+") "+ "values" + " (" + values + ") ";
         //String client=sql;
