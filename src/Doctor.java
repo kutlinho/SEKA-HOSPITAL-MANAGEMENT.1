@@ -89,16 +89,41 @@ public class Doctor extends HealthCareStaff implements IViewPatients {
             System.out.println("Hasta zaten yatan hasta değildir");
         }
     }
-
+    public ArrayList<ArrayList> viewInpatients() {
+        ArrayList<ArrayList> inpatientsOfDoctor=null;
+        for (ArrayList patient:viewPatients()) {
+            if(((int)patient.get(11))>0){
+                inpatientsOfDoctor.add(patient);
+            }
+        }
+        return inpatientsOfDoctor;
+    }
 
     @Override
     public double calculateSalary() {
         return 1;
     }
-
+    public void addPatient(Patient patient) {
+        String client = "insert into patient (personalId,name,gender,birthday,height,weight," +
+                "bloodGroup,medicinesId,diagnosisId,doctorsId,roomId) values ('"+patient.getId()+"', '"+
+                patient.getName()+"', '"+ patient.getGender()+"', '"+patient.getBirthday()+"', '"+
+                patient.getHeight()+"', '"+patient.getWeight()+"', '"+ patient.getBloodGroup()+"', '"+
+                patient.getMedicines()+"', '"+patient.getDiagnosis()+"', '"+patient.getDoctors()+"', '"+patient.getRoomId()+"')";
+        DbHelper dataBase=new DbHelper();
+        dataBase.createNewData(client);
+        System.out.println(client);
+    }
 
     @Override
     public ArrayList<ArrayList> viewPatients() {
-        return null;
+        ArrayList<ArrayList> inpatientsOfDoctor=null;
+        for (ArrayList patient:viewPatients()) {
+            if(((int)patient.get(11))>0){
+                inpatientsOfDoctor.add(patient);
+            }
+        }
+        return inpatientsOfDoctor;
     }
+
+
 }

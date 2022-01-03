@@ -1,5 +1,5 @@
 
-public class HealthCareStaff extends Employee {
+public class HealthCareStaff extends Employee implements IWatchRequest,IDayOffRequest {
 
     private Policlinic policlinic;
     private int watchCount = 0;
@@ -48,8 +48,17 @@ public class HealthCareStaff extends Employee {
         return dayOffCount;
     }
 
-    public void setDayOffCaount(int dayOffCount) {
+    public void setDayOffCount(int dayOffCount) {
         this.dayOffCount = dayOffCount;
     }
 
+    @Override
+    public void addDayOffRequest(String requestedCount,String description) {
+        dbHelper.createNewData("insert into request (regNo,requestedDayOff,description) values ('"+this.getRegistryNumber()+"','"+requestedCount+"','"+description+"')");
+    }
+
+    @Override
+    public void addWatchRequest(String requestedCount,String description) {
+        dbHelper.createNewData("insert into request (regNo,requestedWatch,description) values ('"+this.getRegistryNumber()+"','"+requestedCount+"','"+description+"')");
+    }
 }

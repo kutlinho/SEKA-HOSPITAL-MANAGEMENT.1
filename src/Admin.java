@@ -70,7 +70,7 @@ public class Admin extends Employee implements IViewPatients {
             ArrayList<ArrayList> requestFromDb = dbHelper.selectData("request", "id,regNo,requestedDayOff,description", "regNo= " +
                     hcs.getRegistryNumber()); // taking the certain request from database to store its database id.
             if (check) {// If request is accepted from admin
-                hcs.setDayOffCaount(hcs.getDayOffCount() + ((DayOffRequest) request).getDayOffCount()); // updating dayOffCount
+                hcs.setDayOffCount(hcs.getDayOffCount() + ((DayOffRequest) request).getDayOffCount()); // updating dayOffCount
                 //hcs.setSalary(hcs.calculateSalary()); // Updating the salary due to change
 
                 // Updating hcs' datas

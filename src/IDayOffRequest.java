@@ -1,4 +1,4 @@
 public interface IDayOffRequest {
 
-    void addDayOffRequest();
+    void addDayOffRequest(String requestedCount,String description);
 }

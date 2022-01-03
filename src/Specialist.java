@@ -1,5 +1,6 @@
+import java.util.ArrayList;
 
-public class Specialist extends Doctor implements IWatchRequest,IDayOffRequest{
+public class Specialist extends Doctor{
 
     private DoctorRoom doctorRoom;
 
@@ -22,16 +23,5 @@ public class Specialist extends Doctor implements IWatchRequest,IDayOffRequest{
         this.doctorRoom = doctorRoom;
     }
 
-    @Override
-    public void addWatchRequest() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void addDayOffRequest() {
-        // TODO Auto-generated method stub
-
-    }
 
 }

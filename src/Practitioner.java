@@ -1,5 +1,6 @@
+import java.util.ArrayList;
 
-public class Practitioner extends Doctor implements IWatchRequest,IDayOffRequest{
+public class Practitioner extends Doctor{
 
     public Practitioner(String name, String id, String gender, String birthday, String registryNumber, double salary,
                         String startingDate, Policlinic policlinic,int watchCount,int dayOffCount) {
@@ -12,19 +13,5 @@ public class Practitioner extends Doctor implements IWatchRequest,IDayOffRequest
         // TODO Auto-generated method stub
         return 0;
     }
-
-    @Override
-    public void addWatchRequest() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void addDayOffRequest() {
-        // TODO Auto-generated method stub
-
-    }
-
-
 
 }
