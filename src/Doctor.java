@@ -1,7 +1,7 @@
 import java.sql.*;
 import java.util.ArrayList;
 
-public class Doctor extends HealthCareStaff implements IViewPatients {
+public class Doctor extends HealthCareStaff implements IViewPatients,IWatchRequest,IDayOffRequest{
 
     public Doctor(String name, String id, String gender, String birthday, String registryNumber, double salary,
                   String startingDate, Policlinic policlinic, int watchCount, int dayOffCount) {
@@ -10,7 +10,7 @@ public class Doctor extends HealthCareStaff implements IViewPatients {
 
     DbHelper helper = new DbHelper();
 
-    // function to add diagnosgis to patient
+    // function to add diagnosis to patient
     public void addDiagnosis(String personalId, String diagnosisId) throws SQLException {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -162,8 +162,8 @@ public class Doctor extends HealthCareStaff implements IViewPatients {
                     statement.executeUpdate();
 
                     // updating patient data in database
-                    String updatepatientDB = "update patient set roomId =? where personalId=?";
-                    statement = connection.prepareStatement(updatepatientDB);
+                    String updatePatientDB = "update patient set roomId =? where personalId=?";
+                    statement = connection.prepareStatement(updatePatientDB);
                     statement.setInt(1, giveRoomNumber());
                     statement.setString(2, personalId);
                     statement.executeUpdate();
@@ -213,8 +213,8 @@ public class Doctor extends HealthCareStaff implements IViewPatients {
                 statement.executeUpdate();
 
                 // deleting the patient's room number in the database
-                String updatepatientDB = "update patient set roomId =? where personalId=?";
-                statement = connection.prepareStatement(updatepatientDB);
+                String updatePatientDB = "update patient set roomId =? where personalId=?";
+                statement = connection.prepareStatement(updatePatientDB);
                 statement.setInt(1, 0);
                 statement.setString(2, personalId);
                 statement.executeUpdate();
@@ -238,10 +238,61 @@ public class Doctor extends HealthCareStaff implements IViewPatients {
     public double calculateSalary() {
         return 1;
     }
+    public ArrayList<ArrayList> viewInpatients() {
+        ArrayList<ArrayList> inpatientsOfDoctor=null;
+        for (ArrayList patient:viewPatients()) {
+            if(((int)patient.get(11))>0){
+                inpatientsOfDoctor.add(patient);
+            }
+        }
+        return inpatientsOfDoctor;
+    }
+
+
+    public void addPatient(Patient patient) {
+        String client = "insert into patient (personalId,name,gender,birthday,height,weight," +
+                "bloodGroup,medicinesId,diagnosisId,doctorsId,roomId) values ('"+patient.getId()+"', '"+
+                patient.getName()+"', '"+ patient.getGender()+"', '"+patient.getBirthday()+"', '"+
+                patient.getHeight()+"', '"+patient.getWeight()+"', '"+ patient.getBloodGroup()+"', '"+
+                patient.getMedicines()+"', '"+patient.getDiagnosis()+"', '"+patient.getDoctors()+"', '"+patient.getRoomId()+"')";
+
+        DbHelper dataBase=new DbHelper();
+        dataBase.createNewData(client);
+        System.out.println(client);
+    }
 
 
     @Override
     public ArrayList<ArrayList> viewPatients() {
-        return null;
+        DbHelper dataBase = new DbHelper();
+        ArrayList<ArrayList> patients =new ArrayList<ArrayList>(); // all patients lists in the dataBase
+        ArrayList<ArrayList> patientsOfDoctor=new ArrayList<ArrayList>(); // this doctor's patients lists
+        patients=dataBase.selectData("patient","personalId,name,gender,birthday,height,weight, bloodGroup,medicinesId,diagnosisId,doctorsId,roomId");
+        for (ArrayList inpatient:patients) { // loop of all patients
+            String[] doctorId=((String)inpatient.get(9)).split(","); //extract doctorsId
+            for (String id:doctorId) { // loop of id
+                if(id.equals(this.getRegistryNumber())){ // if the id equals to this doctor's Rid
+                    patientsOfDoctor.add(inpatient); // add doctor's patients
+                }
+            }
+        }
+        return patientsOfDoctor;
+    }
+
+    @Override
+    public void addDayOffRequest(DayOffRequest dayOffRequest) {
+        DbHelper dataBase=new DbHelper();
+        String client="insert into request (regNo,requestedDayOff,description) values ('"+dayOffRequest.getByWho().getRegistryNumber()+"','"+dayOffRequest.getDayOffCount()+"','"+dayOffRequest.getExplanation()+"')";
+        System.out.println(client);
+        dataBase.createNewData(client);
+        //"insert into " + table + " ("+columns+") "+ "values" + " (" + values + ") "
+    }
+
+    @Override
+    public void addWatchRequest(WatchRequest watchRequest) {
+        DbHelper dataBase=new DbHelper();
+        String client="insert into request (regNo,requestedWatch,description) values ('"+watchRequest.getByWho().getRegistryNumber()+"','"+watchRequest.getWatchCount()+"','"+watchRequest.getExplanation()+"')";
+        System.out.println(client);
+        dataBase.createNewData(client);
     }
 }
