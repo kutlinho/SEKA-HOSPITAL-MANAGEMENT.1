@@ -1,3 +1,3 @@
 public interface IWatchRequest {
-    void addWatchRequest(String requestedCount,String description);
+    void addWatchRequest(WatchRequest request);
 }

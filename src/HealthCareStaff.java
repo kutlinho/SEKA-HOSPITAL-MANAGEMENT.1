@@ -53,12 +53,12 @@ public class HealthCareStaff extends Employee implements IWatchRequest,IDayOffRe
     }
 
     @Override
-    public void addDayOffRequest(String requestedCount,String description) {
-        dbHelper.createNewData("insert into request (regNo,requestedDayOff,description) values ('"+this.getRegistryNumber()+"','"+requestedCount+"','"+description+"')");
+    public void addDayOffRequest(DayOffRequest request) {
+        dbHelper.createNewData("insert into request (regNo,requestedDayOff,description) values ('"+this.getRegistryNumber()+"','"+request.getDayOffCount()+"','"+request.getExplanation()+"')");
     }
 
     @Override
-    public void addWatchRequest(String requestedCount,String description) {
-        dbHelper.createNewData("insert into request (regNo,requestedWatch,description) values ('"+this.getRegistryNumber()+"','"+requestedCount+"','"+description+"')");
+    public void addWatchRequest(WatchRequest request) {
+        dbHelper.createNewData("insert into request (regNo,requestedWatch,description) values ('"+this.getRegistryNumber()+"','"+request.getWatchCount()+"','"+request.getExplanation()+"')");
     }
 }
